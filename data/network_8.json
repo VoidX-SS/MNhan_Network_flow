@@ -1,0 +1,42 @@
+{
+  "name": "Mạng hai cửa ngõ",
+  "nodes": {
+    "O1": [0.08, 0.28, "Nguồn 1"], "O2": [0.08, 0.72, "Nguồn 2"],
+    "A": [0.35, 0.22, "Nút A"], "B": [0.35, 0.78, "Nút B"],
+    "C": [0.65, 0.22, "Nút C"], "D": [0.65, 0.78, "Nút D"],
+    "T1": [0.92, 0.28, "Đích 1"], "T2": [0.92, 0.72, "Đích 2"]
+  },
+  "roads": [
+    {"id":"E01", "from":"O1", "to":"A",  "minutes":2.0, "capacity":105},
+    {"id":"E02", "from":"O1", "to":"B",  "minutes":3.1, "capacity":85},
+    {"id":"E03", "from":"O2", "to":"A",  "minutes":3.2, "capacity":83},
+    {"id":"E04", "from":"O2", "to":"B",  "minutes":2.1, "capacity":115},
+    {"id":"E05", "from":"A",  "to":"C",  "minutes":3.0, "capacity":86},
+    {"id":"E06", "from":"A",  "to":"D",  "minutes":4.4, "capacity":84},
+    {"id":"E07", "from":"B",  "to":"C",  "minutes":3.8, "capacity":100},
+    {"id":"E08", "from":"B",  "to":"D",  "minutes":4.6, "capacity":98},
+    {"id":"E09", "from":"C",  "to":"D",  "minutes":1.1, "capacity":65},
+    {"id":"E10", "from":"C",  "to":"T1", "minutes":1.9, "capacity":106},
+    {"id":"E11", "from":"D",  "to":"T1", "minutes":2.8, "capacity":106},
+    {"id":"E12", "from":"C",  "to":"T2", "minutes":2.7, "capacity":90},
+    {"id":"E13", "from":"D",  "to":"T2", "minutes":2.0, "capacity":105}
+  ],
+  "pairs": [
+    {"from":"O1", "to":"T1", "routes":[
+      ["O1","A","C","T1"], ["O1","A","D","T1"], ["O1","B","C","T1"],
+      ["O1","B","D","T1"], ["O1","A","C","D","T1"], ["O1","B","C","D","T1"]
+    ]},
+    {"from":"O2", "to":"T2", "routes":[
+      ["O2","A","C","T2"], ["O2","A","D","T2"], ["O2","B","C","T2"],
+      ["O2","B","D","T2"], ["O2","A","C","D","T2"], ["O2","B","C","D","T2"]
+    ]}
+  ],
+  "cuts": [["O1", "O2", "A", "B"]],
+  "cases": {
+    "normal": {"name":"Ngày thường", "demand":[125,105], "capacity":{}, "description":"230 xe qua hai cửa ngõ. Mốc để so sánh khi có sự cố."},
+    "peak": {"name":"Giờ cao điểm", "demand":[160,132], "capacity":{}, "description":"Tăng từ 230 lên 292 xe, giữ nguyên hạ tầng."},
+    "incident": {"name":"Hẹp làn E05", "demand":[125,105], "capacity":{"E05":43}, "description":"Giữ 230 xe, sức chứa E05 giảm từ 86 còn 43."},
+    "closed": {"name":"Đóng E05", "demand":[125,105], "capacity":{"E05":0}, "description":"Giữ 230 xe, đóng hẳn E05. Các tuyến chứa E05 bị loại khi chia xe."},
+    "cut": {"name":"Cao điểm + đóng E05", "demand":[160,132], "capacity":{"E05":0}, "description":"292 xe cần qua cầu nhưng ba đường qua được chỉ chứa 282 xe."}
+  }
+}

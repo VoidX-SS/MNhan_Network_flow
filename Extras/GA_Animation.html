@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Một lượt sinh con của GA</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f4f7fa;
+      --ink: #172e41;
+      --muted: #516577;
+      --line: #dae3e9;
+      --blue: #12679b;
+      --orange: #a6490b;
+      --green: #087860;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.55 system-ui, sans-serif; }
+    header, main, footer { width: min(1040px, calc(100% - 40px)); margin: auto; }
+    header { padding: 29px 0 18px; }
+    .eyebrow { margin: 0 0 7px; color: var(--blue); font-size: .77rem; font-weight: 750; letter-spacing: .1em; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.85rem, 4vw, 2.65rem); line-height: 1.17; letter-spacing: -.03em; }
+    header p:last-child { max-width: 775px; margin: 0; color: var(--muted); }
+    .workspace { display: grid; grid-template-columns: minmax(300px, 1.12fr) minmax(280px, 1fr); gap: 16px; }
+    .card { background: white; border: 1px solid var(--line); border-radius: 16px; min-width: 0; }
+    .chart { padding: 7px 12px 12px; }
+    .chart svg { width: 100%; display: block; }
+    .info { padding: 22px; }
+    h2 { margin: 0 0 8px; font-size: 1.48rem; line-height: 1.2; }
+    #explanation { margin: 0 0 12px; color: var(--muted); }
+    #facts { padding-left: 22px; margin: 10px 0 15px; }
+    #facts li { margin: 5px 0; }
+    .hint { margin: 12px 0 0; padding: 10px 12px; border-left: 3px solid var(--blue); background: #eef6fc; color: #234b65; font-size: .9rem; }
+    .legend { display: flex; flex-wrap: wrap; gap: 5px 14px; font-size: .81rem; color: var(--muted); padding: 0 8px; }
+    .legend b { padding-right: 3px; font-size: .9rem; }
+    .blue { color: var(--blue); }
+    .orange { color: var(--orange); }
+    .green { color: var(--green); }
+    .controls { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; padding: 12px 0 10px; }
+    button { cursor: pointer; border: 1px solid #c2d3de; border-radius: 8px; padding: 8px 12px; background: white; color: var(--ink); font: inherit; font-size: .91rem; }
+    button:focus-visible, input:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+    button:disabled { color: #748798; cursor: default; background: #eef2f5; }
+    #play { background: var(--ink); color: white; border-color: var(--ink); min-width: 88px; }
+    input[type=range] { accent-color: var(--blue); flex: 1; min-width: 110px; }
+    .steps { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; }
+    .steps button { padding: 7px 5px; }
+    .steps button[aria-current=step] { border-color: var(--blue); background: #e8f4fb; color: #124b71; font-weight: 700; }
+    footer { margin: 15px auto 26px; font-size: .83rem; color: var(--muted); }
+    svg text { fill: var(--muted); font-size: 11px; font-family: system-ui, sans-serif; }
+    .point { fill: #708497; stroke: white; stroke-width: 1.7; }
+    .point-name { fill: var(--ink); font-weight: 650; paint-order: stroke; stroke: white; stroke-width: 2.5; }
+    .candidate .point { transition: r .25s, fill .25s; }
+    .candidate.in-draw .point { fill: #446682; r: 6; }
+    .candidate.parent-a .point { fill: var(--blue); r: 9; }
+    .candidate.parent-b .point { fill: var(--orange); r: 9; }
+    .child { transition: transform .58s ease, opacity .25s ease; }
+    @media (prefers-reduced-motion: reduce) { .child, .candidate .point { transition: none; } }
+    @media (max-width: 735px) {
+      header, main, footer { width: calc(100% - 26px); }
+      .workspace { grid-template-columns: 1fr; }
+      .chart svg { max-height: 440px; }
+      .info { padding: 17px; }
+      .steps button { font-size: .73rem; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">EXTRAS · MÔ PHỎNG TỪ MÃ GA</p>
+    <h1>Một lượt sinh con của GA</h1>
+    <p>Mỗi chấm là một phương án có hai gene x và y. Điểm càng nhỏ càng tốt. Kéo thanh hoặc bấm từng bước để xem từ quần thể ban đầu đến lúc chấm con.</p>
+  </header>
+  <main>
+    <div class="workspace">
+      <section class="card chart" aria-label="Bản đồ các cá thể">
+        <svg id="plot" viewBox="0 0 420 370" role="img" aria-labelledby="plotTitle plotDescription">
+          <title id="plotTitle">Quần thể GA trên mặt phẳng hai gene</title>
+          <desc id="plotDescription">Điểm xanh lá là con. Các vòng đồng tâm cho thấy vùng có điểm gần bằng nhau.</desc>
+          <defs>
+            <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+              <path d="M 0 0 L 10 5 L 0 10 z" fill="#087860"></path>
+            </marker>
+          </defs>
+          <g id="grid"></g>
+          <rect id="mixRegion" fill="#dfeff9" fill-opacity=".72" stroke="#12679b" stroke-dasharray="4 4" visibility="hidden"></rect>
+          <g id="points"></g>
+          <line id="mutationLine" stroke="#087860" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#arrow)" visibility="hidden"></line>
+          <circle id="before" r="6" fill="white" stroke="#087860" stroke-width="2" visibility="hidden"></circle>
+          <g id="child" class="child" opacity="0">
+            <circle r="8" fill="#087860" stroke="white" stroke-width="2"></circle>
+            <text class="point-name" x="10" y="15">Con</text>
+          </g>
+        </svg>
+        <div class="legend">
+          <span><b>✦</b> Điểm tốt nhất có thể</span>
+          <span><b class="blue">●</b> Bố</span>
+          <span><b class="orange">●</b> Mẹ</span>
+          <span><b class="green">●</b> Con</span>
+        </div>
+      </section>
+      <section class="card info" aria-live="polite">
+        <p class="eyebrow" id="stageCount"></p>
+        <h2 id="stageTitle"></h2>
+        <p id="explanation"></p>
+        <ul id="facts"></ul>
+        <p class="hint" id="hint"></p>
+      </section>
+    </div>
+    <nav class="controls" aria-label="Điều khiển">
+      <button id="prev" type="button">← Lùi</button>
+      <button id="play" type="button" aria-pressed="false">Phát</button>
+      <button id="next" type="button">Tiến →</button>
+      <input type="range" id="stageSlider" min="0" max="4" value="0" step="1" aria-label="Bước mô phỏng">
+    </nav>
+    <nav class="steps" aria-label="Chọn bước">
+      <button type="button" data-stage="0">1. Khởi tạo</button>
+      <button type="button" data-stage="1">2. Chọn</button>
+      <button type="button" data-stage="2">3. Lai</button>
+      <button type="button" data-stage="3">4. Đột biến</button>
+      <button type="button" data-stage="4">5. Chấm</button>
+    </nav>
+    <noscript>Hãy bật JavaScript để sử dụng thanh mô phỏng.</noscript>
+  </main>
+  <footer>
+    Dữ liệu của một lượt minh họa cố định. Seed khởi tạo 19, seed bốc số 73. Chạy <code>python -m Extras.ga_trace</code> từ thư mục dự án để kiểm lại.
+  </footer>
+  <script id="trace" type="application/json">{"population_seed":19,"draw_seed":73,"center":[0.32,0.68],"population":[{"id":"P1","genes":[0.6771258268002703,0.7849113560871108],"score":0.13854524880381325},{"id":"P2","genes":[0.5204661572030815,0.5114917024932601],"score":0.06858172651239056},{"id":"P3","genes":[0.39353466292596484,0.996816937097899],"score":0.10578031828372932},{"id":"P4","genes":[0.2893649457745707,0.14825979318469462],"score":0.28368615409137876},{"id":"P5","genes":[0.2610785745655583,0.260437193601329],"score":0.1795046828883552},{"id":"P6","genes":[0.32736701494461073,0.26791084434471324],"score":0.16987174511788133}],"tournaments":[[2,0,4],[3,4,1]],"winners":[2,1],"cross":{"draw":0.46096185816572743,"weights":[0.5867365604164771,0.4872337833364674],"genes":[0.44599080884240233,0.747958552698337],"score":0.020492048797615403},"mutation":{"draws":[0.5178992785551113,0.20223217048411235],"delta_y":-0.19480273491851668,"genes":[0.44599080884240233,0.5531558177798204],"score":0.031963130475868906}}</script>
+  <script>
+    "use strict";
+
+    const trace = JSON.parse(document.getElementById("trace").textContent);
+    const byId = (id) => document.getElementById(id);
+    const svg = "http://www.w3.org/2000/svg";
+    const left = 61;
+    const top = 23;
+    const size = 300;
+    const onX = (x) => left + size * x;
+    const onY = (y) => top + size * (1 - y);
+    const fixed = (v, digits = 4) => v.toLocaleString("vi-VN", {
+      minimumFractionDigits: digits,
+      maximumFractionDigits: digits
+    });
+    const coordinate = (genes) => "(" + genes.map((v) => fixed(v, 3)).join(" | ") + ")";
+    const startBest = trace.population.reduce((a, b) => a.score < b.score ? a : b);
+    const winners = trace.winners.map((index) => trace.population[index]);
+    const drew = (i) => trace.tournaments[i].map((index) => trace.population[index].id).join(", ");
+    const cross = trace.cross;
+    const changed = trace.mutation;
+    const stageButtons = Array.from(document.querySelectorAll("[data-stage]"));
+    let step = 0;
+    let timer = null;
+
+    function draw(parent, name, attrs, content) {
+      const el = document.createElementNS(svg, name);
+      for (const [key, value] of Object.entries(attrs)) el.setAttribute(key, value);
+      if (content) el.textContent = content;
+      parent.append(el);
+      return el;
+    }
+
+    function drawBoard() {
+      const grid = byId("grid");
+      draw(grid, "rect", {x: left, y: top, width: size, height: size, fill: "#f8fbfd", stroke: "#c8d8e4"});
+      for (const tick of [0, 0.25, 0.5, 0.75, 1]) {
+        const x = onX(tick);
+        const y = onY(tick);
+        draw(grid, "line", {x1: x, x2: x, y1: top, y2: top + size, stroke: "#e1eaf1"});
+        draw(grid, "line", {x1: left, x2: left + size, y1: y, y2: y, stroke: "#e1eaf1"});
+        draw(grid, "text", {x, y: top + size + 16, "text-anchor": "middle"}, fixed(tick, 2));
+        draw(grid, "text", {x: left - 8, y: y + 4, "text-anchor": "end"}, fixed(tick, 2));
+      }
+      const centerX = onX(trace.center[0]);
+      const centerY = onY(trace.center[1]);
+      for (const radius of [0.08, 0.16, 0.24]) {
+        draw(grid, "circle", {cx: centerX, cy: centerY, r: radius * size, fill: "none", stroke: "#a8c7da", "stroke-dasharray": "3 4"});
+      }
+      draw(grid, "text", {x: centerX, y: centerY + 5, "text-anchor": "middle", style: "font-size:18px"}, "✦");
+      draw(grid, "text", {x: onX(.5), y: top + size + 36, "text-anchor": "middle"}, "Gene x");
+      draw(grid, "text", {x: 17, y: onY(.5), "text-anchor": "middle", transform: "rotate(-90 17 " + onY(.5) + ")"}, "Gene y");
+
+      for (const person of trace.population) {
+        const [x, y] = person.genes;
+        const group = draw(byId("points"), "g", {id: person.id, class: "candidate"});
+        draw(group, "title", {}, person.id + " " + coordinate(person.genes) + " · f = " + fixed(person.score));
+        draw(group, "circle", {cx: onX(x), cy: onY(y), r: 5.5, class: "point"});
+        const labelLeft = person.id === "P5";
+        draw(group, "text", {
+          x: onX(x) + (labelLeft ? -10 : 10), y: onY(y) + 4,
+          "text-anchor": labelLeft ? "end" : "start", class: "point-name"
+        }, person.id);
+      }
+      const [a, b] = winners.map((person) => person.genes);
+      const region = byId("mixRegion");
+      region.setAttribute("x", onX(Math.min(a[0], b[0])));
+      region.setAttribute("y", onY(Math.max(a[1], b[1])));
+      region.setAttribute("width", size * Math.abs(a[0] - b[0]));
+      region.setAttribute("height", size * Math.abs(a[1] - b[1]));
+      const line = byId("mutationLine");
+      line.setAttribute("x1", onX(cross.genes[0]));
+      line.setAttribute("y1", onY(cross.genes[1]));
+      line.setAttribute("x2", onX(changed.genes[0]));
+      line.setAttribute("y2", onY(changed.genes[1]));
+      byId("before").setAttribute("cx", onX(cross.genes[0]));
+      byId("before").setAttribute("cy", onY(cross.genes[1]));
+    }
+
+    const stages = [
+      {
+        title: "Nhìn quần thể ban đầu",
+        explanation: "Ta đang tối thiểu hóa bình phương khoảng cách tới ngôi sao. Sáu phương án ban đầu được bốc ngẫu nhiên.",
+        facts: [
+          "Nghiệm tốt nhất nằm ở " + coordinate(trace.center) + " với f = 0.",
+          startBest.id + " đang tốt nhất trong sáu phương án, f = " + fixed(startBest.score) + ".",
+          "Các vòng nét đứt nối những điểm cách ngôi sao như nhau."
+        ],
+        hint: "Di chuột lên một chấm để xem gene và điểm của phương án đó."
+      },
+      {
+        title: "Chọn hai bố mẹ",
+        explanation: "Mỗi lượt chọn bốc ba ứng viên có hoàn lại. Phương án có điểm nhỏ nhất trong nhóm vừa bốc sẽ thắng.",
+        facts: [
+          "Bốc bố " + drew(0) + ". Thắng là " + winners[0].id + " với f = " + fixed(winners[0].score) + ".",
+          "Bốc mẹ " + drew(1) + ". Thắng là " + winners[1].id + " với f = " + fixed(winners[1].score) + "."
+        ],
+        hint: "Cách này ưu tiên ứng viên tốt mà vẫn cho các ứng viên khác cơ hội được chọn."
+      },
+      {
+        title: "Lai hai bộ gene",
+        explanation: "Số bốc " + fixed(cross.draw, 3) + " nhỏ hơn xác suất lai 0,9. Mỗi gene của con là trung bình có trọng số của gene bố và mẹ.",
+        facts: [
+          "Gene x lấy trọng số từ bố là " + fixed(cross.weights[0], 3) + ".",
+          "Gene y lấy trọng số từ bố là " + fixed(cross.weights[1], 3) + ".",
+          "Con trước đột biến có tọa độ " + coordinate(cross.genes) + "."
+        ],
+        hint: "Hai trọng số được bốc riêng. Con nằm trong hình chữ nhật tạo bởi bố và mẹ."
+      },
+      {
+        title: "Thử đột biến",
+        explanation: "Mỗi gene có xác suất đột biến 1/2 trong ví dụ hai chiều. Sau khi cộng thay đổi, giá trị được giữ trong đoạn [0, 1].",
+        facts: [
+          "Gene x bốc " + fixed(changed.draws[0], 3) + " nên giữ nguyên.",
+          "Gene y bốc " + fixed(changed.draws[1], 3) + " nên cộng " + fixed(changed.delta_y, 3) + ".",
+          "Con sau đột biến có tọa độ " + coordinate(changed.genes) + "."
+        ],
+        hint: "Mũi tên nối vị trí trước và sau đột biến. Lần thử này đưa con ra xa ngôi sao hơn một chút."
+      },
+      {
+        title: "Chấm điểm của con",
+        explanation: "Trong một vòng đầy đủ, GA sinh đủ số con rồi chấm cả nhóm. Ở đây mình xem chi tiết đúng một con.",
+        facts: [
+          "Điểm trước đột biến là " + fixed(cross.score) + ".",
+          "Điểm sau đột biến là " + fixed(changed.score) + ", vẫn thấp hơn ứng viên tốt nhất ban đầu (" + fixed(startBest.score) + ")."
+        ],
+        hint: "Đột biến mở thêm cơ hội thử vị trí mới. Chỉ sau khi chấm mới biết lần thử đó giúp ích ra sao."
+      }
+    ];
+
+    function setStage(index) {
+      step = Math.max(0, Math.min(stages.length - 1, index));
+      const stage = stages[step];
+      byId("stageCount").textContent = "BƯỚC " + (step + 1) + " / " + stages.length;
+      byId("stageTitle").textContent = stage.title;
+      byId("explanation").textContent = stage.explanation;
+      byId("hint").textContent = stage.hint;
+      const list = byId("facts");
+      list.replaceChildren();
+      for (const line of stage.facts) {
+        const item = document.createElement("li");
+        item.textContent = line;
+        list.append(item);
+      }
+      byId("stageSlider").value = step;
+      byId("stageSlider").setAttribute("aria-valuetext", stage.title);
+      byId("prev").disabled = step === 0;
+      byId("next").disabled = step === stages.length - 1;
+      for (const button of stageButtons) {
+        if (Number(button.dataset.stage) === step) button.setAttribute("aria-current", "step");
+        else button.removeAttribute("aria-current");
+      }
+      for (const [index, person] of trace.population.entries()) {
+        const point = byId(person.id);
+        point.classList.toggle("in-draw", step === 1 && trace.tournaments.flat().includes(index));
+        point.classList.toggle("parent-a", step >= 1 && trace.winners[0] === index);
+        point.classList.toggle("parent-b", step >= 1 && trace.winners[1] === index);
+      }
+      byId("mixRegion").setAttribute("visibility", step === 2 ? "visible" : "hidden");
+      byId("mutationLine").setAttribute("visibility", step >= 3 ? "visible" : "hidden");
+      byId("before").setAttribute("visibility", step >= 3 ? "visible" : "hidden");
+      const genes = step >= 3 ? changed.genes : cross.genes;
+      const child = byId("child");
+      child.style.transform = "translate(" + onX(genes[0]) + "px, " + onY(genes[1]) + "px)";
+      child.setAttribute("opacity", step >= 2 ? "1" : "0");
+    }
+
+    function stop() {
+      window.clearInterval(timer);
+      timer = null;
+      byId("play").textContent = "Phát";
+      byId("play").setAttribute("aria-pressed", "false");
+    }
+
+    function moveTo(index) {
+      stop();
+      setStage(index);
+    }
+
+    byId("prev").addEventListener("click", () => moveTo(step - 1));
+    byId("next").addEventListener("click", () => moveTo(step + 1));
+    byId("stageSlider").addEventListener("input", (event) => moveTo(Number(event.target.value)));
+    for (const button of stageButtons) button.addEventListener("click", () => moveTo(Number(button.dataset.stage)));
+    byId("play").addEventListener("click", () => {
+      if (timer !== null) {
+        stop();
+        return;
+      }
+      if (step === stages.length - 1) setStage(0);
+      byId("play").textContent = "Tạm dừng";
+      byId("play").setAttribute("aria-pressed", "true");
+      timer = window.setInterval(() => {
+        setStage(step + 1);
+        if (step === stages.length - 1) stop();
+      }, 2100);
+    });
+    drawBoard();
+    setStage(0);
+  </script>
+</body>
+</html>

@@ -1,0 +1,6 @@
+﻿case,paired_valid,GA_lower,WOA_lower,ties,tie_tolerance_vehicle_minutes,median_GA_minus_WOA
+normal,30,19,11,0,0.01,-72.891928253684
+peak,30,22,8,0,0.01,-189.09440770337142
+incident,30,24,6,0,0.01,-157.03428939675132
+closed,30,25,5,0,0.01,-214.41822487985155
+cut,0,0,0,0,0.01,

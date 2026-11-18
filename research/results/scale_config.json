@@ -1,0 +1,22 @@
+{
+  "nodes": [
+    50,
+    100,
+    250,
+    500,
+    1000,
+    2000,
+    5000
+  ],
+  "seeds": [
+    1000,
+    1001,
+    1002
+  ],
+  "memory_seed": 1000,
+  "population": 16,
+  "updates": 18,
+  "machine": "x86_64",
+  "python": "3.12.14",
+  "platform": "Linux-6.18.57-x86_64-with-glibc2.41"
+}

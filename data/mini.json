@@ -1,0 +1,13 @@
+{
+  "name": "Hai tuyến giống nhau",
+  "nodes": {"S":[0.1,0.5,"Nguồn"], "A":[0.5,0.2,"Nút A"], "B":[0.5,0.8,"Nút B"], "T":[0.9,0.5,"Đích"]},
+  "roads": [
+    {"id":"SA","from":"S","to":"A","minutes":1,"capacity":75},
+    {"id":"AT","from":"A","to":"T","minutes":1,"capacity":75},
+    {"id":"SB","from":"S","to":"B","minutes":1,"capacity":75},
+    {"id":"BT","from":"B","to":"T","minutes":1,"capacity":75}
+  ],
+  "pairs": [{"from":"S","to":"T","routes":[["S","A","T"],["S","B","T"]]}],
+  "cuts": [],
+  "cases": {"split":{"name":"Hai tuyến giống nhau","demand":[100],"capacity":{},"description":"Kiểm tra bằng tay. Tối ưu ở 50 xe mỗi tuyến."}}
+}

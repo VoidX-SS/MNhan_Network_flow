@@ -1,0 +1,3 @@
+﻿algorithm,paired_valid,lower_cost,unchanged_cost,higher_cost,median_cost_180_minus_90
+GA,12,12,0,0,-8.93611833621253
+WOA,12,2,6,4,1.1368683772161603e-13

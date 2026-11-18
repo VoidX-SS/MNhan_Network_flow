@@ -1,0 +1,380 @@
+{
+  "normal": {
+    "family": "mốc",
+    "description": "460 xe qua 5 hành lang. Mốc để so sánh khi có sự cố.",
+    "hypothesis": "Mốc để đo số lượt hợp lệ và sai số chi phí.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5035.927792403835,
+      "upper_bound": 5035.927870370476,
+      "gap_percent": 1.54820807383062e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "peak": {
+    "family": "nhu cầu",
+    "description": "Tăng từ 460 lên 590 xe, giữ sức chứa các đoạn.",
+    "hypothesis": "Nhu cầu cao hơn làm thu hẹp các cách chia hợp lệ.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 590,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 6632.9253378891035,
+      "upper_bound": 6632.925567193331,
+      "gap_percent": 3.4570602776881424e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "incident": {
+    "family": "sự cố",
+    "description": "Giữ 460 xe, sức chứa E23 giảm từ 160 còn 80.",
+    "hypothesis": "Giảm sức chứa nhưng giữ đủ tuyến để phân phối lại xe.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5137.40151081975,
+      "upper_bound": 5137.401517520931,
+      "gap_percent": 1.3043910613978673e-07,
+      "minimum_violation_lower": null
+    }
+  },
+  "closed": {
+    "family": "sự cố",
+    "description": "Giữ 460 xe. Các tuyến đi qua E23 được bỏ khi chia xe.",
+    "hypothesis": "Đóng một hành lang ở ngày thường, bốn lối còn lại đủ sức chứa tổng.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5540.197521249074,
+      "upper_bound": 5540.197522579171,
+      "gap_percent": 2.4008113212015085e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "cut": {
+    "family": "vô nghiệm",
+    "description": "590 xe cần qua lát cắt. Bốn đoạn còn mở chỉ chứa 520 xe.",
+    "hypothesis": "Lát cắt chỉ còn 520 chỗ cho 590 xe nên cả hai phải báo vô nghiệm theo mô hình.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 590,
+    "reference": {
+      "status": "infeasible",
+      "reason": "Lát cắt có nhu cầu vượt sức chứa.",
+      "lower_bound": null,
+      "upper_bound": null,
+      "gap_percent": null,
+      "minimum_violation_lower": 70.0
+    }
+  },
+  "light": {
+    "family": "nhu cầu",
+    "description": "Còn 40% nhu cầu ngày thường, sức chứa giữ nguyên.",
+    "hypothesis": "Kiểm tra tốc độ tối ưu chi phí khi ràng buộc sức chứa ít gây khó.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 184.0,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 1971.551120124288,
+      "upper_bound": 1971.5511310212112,
+      "gap_percent": 5.527081227963873e-07,
+      "minimum_violation_lower": null
+    }
+  },
+  "skewed": {
+    "family": "nhu cầu",
+    "description": "Giữ tổng 460 xe, tập trung nhu cầu tại O1 và O3.",
+    "hypothesis": "Cùng tổng nhu cầu nhưng các tuyến có thể tranh một số đoạn nhiều hơn.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5108.072920101639,
+      "upper_bound": 5108.073046342114,
+      "gap_percent": 2.4713914000539487e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "tight_cut_96": {
+    "family": "lát cắt hẹp",
+    "description": "460 xe chia qua năm đoạn có tổng sức chứa 480.",
+    "hypothesis": "Khi phần dư nhỏ, thuật toán phải phối hợp nhiều trọng số để chạm miền hợp lệ.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5092.726663236274,
+      "upper_bound": 5092.726734623604,
+      "gap_percent": 1.401750660243369e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "tight_cut_99": {
+    "family": "lát cắt hẹp",
+    "description": "460 xe chia qua năm đoạn có tổng sức chứa 464.",
+    "hypothesis": "Khi phần dư nhỏ, thuật toán phải phối hợp nhiều trọng số để chạm miền hợp lệ.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5115.180210282065,
+      "upper_bound": 5115.180211526212,
+      "gap_percent": 2.432264092608535e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "tight_cut_100": {
+    "family": "lát cắt hẹp",
+    "description": "460 xe chia qua năm đoạn có tổng sức chứa 460.",
+    "hypothesis": "Khi phần dư nhỏ, thuật toán phải phối hợp nhiều trọng số để chạm miền hợp lệ.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5115.217891915448,
+      "upper_bound": 5115.217893174678,
+      "gap_percent": 2.4617328176644972e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "double_close_feasible": {
+    "family": "sự cố",
+    "description": "Đóng E14 và E23, 330 xe đi qua ba hành lang còn mở.",
+    "hypothesis": "Nhiều đoạn cùng đóng làm thay đổi các tuyến khả dụng và tỷ lệ tìm được nghiệm.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 330,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 4116.446849255581,
+      "upper_bound": 4116.446850159184,
+      "gap_percent": 2.195104244473e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "isolate_od": {
+    "family": "vô nghiệm",
+    "description": "Đóng E01 là lối ra duy nhất của O1. O1 vẫn phát 90 xe.",
+    "hypothesis": "Tổng sức chứa giữa mạng có thể còn dư dù một nguồn hoàn toàn mất lối đi.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "infeasible",
+      "reason": "Lát cắt có nhu cầu vượt sức chứa.",
+      "lower_bound": null,
+      "upper_bound": null,
+      "gap_percent": null,
+      "minimum_violation_lower": 90.0
+    }
+  },
+  "sparse_routes": {
+    "family": "tập tuyến",
+    "description": "Giữ tuyến đi thẳng và các tuyến đổi tối đa một hàng. Có 13 trọng số.",
+    "hypothesis": "Giảm chiều tìm kiếm đồng thời bớt khả năng đổi tuyến; cần đọc cả chất lượng và số chiều.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 13,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5035.927658632199,
+      "upper_bound": 5035.927870370664,
+      "gap_percent": 4.204557314293753e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "far_detour": {
+    "family": "chi phí",
+    "description": "Cùng ca đóng E23, thời gian đường vắng trên đường đổi hàng nhân ba.",
+    "hypothesis": "So với closed để tách ảnh hưởng chi phí đường vòng khỏi tính khả thi.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5886.200750947183,
+      "upper_bound": 5886.2007524379615,
+      "gap_percent": 2.5326663065097914e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "irregular_layout": {
+    "family": "đối chứng",
+    "description": "Xáo tọa độ nút, giữ nguyên cạnh, thời gian, sức chứa và các tuyến.",
+    "hypothesis": "Đối chứng âm. Với cùng seed, lịch sử điểm số và nghiệm phải trùng normal.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5035.927792403835,
+      "upper_bound": 5035.927870370476,
+      "gap_percent": 1.54820807383062e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "many_to_one": {
+    "family": "nguồn đích",
+    "description": "Năm nguồn đi về T3. Tổng 460 xe, vẫn có năm lựa chọn hành lang mỗi cặp.",
+    "hypothesis": "Đo tác động dồn xe về một đầu ra khi đoạn cuối có đủ sức chứa.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5451.139275736975,
+      "upper_bound": 5451.139353473371,
+      "gap_percent": 1.4260577797023881e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "one_to_many": {
+    "family": "nguồn đích",
+    "description": "O3 cấp xe cho năm đích. Tổng 460 xe, vẫn có năm lựa chọn hành lang mỗi cặp.",
+    "hypothesis": "Đo tác động chia luồng ở một đầu vào khi đoạn đầu có đủ sức chứa.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5350.071769811978,
+      "upper_bound": 5350.072337629138,
+      "gap_percent": 1.0613262485963093e-05,
+      "minimum_violation_lower": null
+    }
+  },
+  "cross_od_swap": {
+    "family": "nguồn đích",
+    "description": "Đảo thứ tự đích từ T5 đến T1 để nhiều tuyến phải đổi hàng.",
+    "hypothesis": "Hai luồng tranh sức chứa khi cùng dùng đoạn đổi hàng có hướng.",
+    "nodes": 50,
+    "roads": 61,
+    "pairs": 5,
+    "dimension": 25,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 5610.692989181736,
+      "upper_bound": 5610.693040760732,
+      "gap_percent": 9.192981372346711e-07,
+      "minimum_violation_lower": null
+    }
+  },
+  "shortcuts": {
+    "family": "tập tuyến",
+    "description": "Thêm hai cạnh chéo qua lát cắt và 10 tuyến ứng viên. Có 35 trọng số.",
+    "hypothesis": "Mở thêm lựa chọn có thể giảm chi phí chuẩn, đồng thời tăng chiều tìm kiếm.",
+    "nodes": 50,
+    "roads": 63,
+    "pairs": 5,
+    "dimension": 35,
+    "demand": 460,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 4987.399865361966,
+      "upper_bound": 4987.400094661742,
+      "gap_percent": 4.597581550064144e-06,
+      "minimum_violation_lower": null
+    }
+  },
+  "overpass": {
+    "family": "giao cắt",
+    "description": "Hai tuyến nhanh cắt nhau trên hình, sức chứa độc lập. Mỗi nhóm có 70 xe và một đường vòng.",
+    "hypothesis": "Nét cắt nhau trên hình không tự tạo xung đột trong đồ thị.",
+    "nodes": 10,
+    "roads": 10,
+    "pairs": 2,
+    "dimension": 4,
+    "demand": 140,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 261.07577994415453,
+      "upper_bound": 261.07577999999995,
+      "gap_percent": 2.1390501626697978e-08,
+      "minimum_violation_lower": null
+    }
+  },
+  "at_grade": {
+    "family": "giao cắt",
+    "description": "Hai tuyến nhanh chia một đoạn có sức chứa 80 xe. Mỗi nhóm có 70 xe và một đường vòng.",
+    "hypothesis": "Phải đổi tuyến do hai nhóm thực sự dùng chung tài nguyên. Đây là mô hình sức chứa gộp.",
+    "nodes": 8,
+    "roads": 9,
+    "pairs": 2,
+    "dimension": 4,
+    "demand": 140,
+    "reference": {
+      "status": "certified",
+      "reason": "Khoảng cận số đủ hẹp để dùng làm mốc gần tối ưu.",
+      "lower_bound": 323.5523021374388,
+      "upper_bound": 323.5523022222223,
+      "gap_percent": 2.620395325365047e-08,
+      "minimum_violation_lower": null
+    }
+  }
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "case": "normal",
+    "role": "mốc ngày thường"
+  },
+  {
+    "case": "many_to_one",
+    "role": "case khó tìm nghiệm hợp lệ"
+  },
+  {
+    "case": "light",
+    "role": "case chênh lệch chất lượng"
+  },
+  {
+    "case": "cut",
+    "role": "vô nghiệm có chứng cứ"
+  }
+]
